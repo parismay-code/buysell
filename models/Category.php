@@ -15,8 +15,8 @@ use yii\base\InvalidConfigException;
  * @property string $label
  * @property string|null $image_url
  *
- * @property PublicationCategory[] $publicationCategories
- * @property Publication[] $publications
+ * @property OfferCategory[] $offerCategories
+ * @property Offer[] $offers
  */
 class Category extends ActiveRecord
 {
@@ -53,24 +53,29 @@ class Category extends ActiveRecord
     }
 
     /**
-     * Gets query for [[PublicationCategories]].
+     * Gets query for [[OfferCategories]].
      *
      * @return ActiveQuery
      */
-    public function getPublicationCategories(): ActiveQuery
+    public function getOfferCategories(): ActiveQuery
     {
-        return $this->hasMany(PublicationCategory::class, ['category_id' => 'id']);
+        return $this->hasMany(OfferCategory::class, ['category_id' => 'id']);
     }
 
     /**
-     * Gets query for [[Publications]].
+     * Gets query for [[Offers]].
      *
      * @throws InvalidConfigException
      *
      * @return ActiveQuery
      */
-    public function getPublications(): ActiveQuery
+    public function getOffers(): ActiveQuery
     {
-        return $this->hasMany(Publication::class, ['id' => 'publication_id'])->viaTable('publication_category', ['category_id' => 'id']);
+        return $this->hasMany(Offer::class, ['id' => 'offer_id'])->viaTable('offer_category', ['category_id' => 'id']);
+    }
+
+    public function getCategoryOffersCount(): int
+    {
+        return count(OfferCategory::findAll(['category_id' => $this->id]));
     }
 }

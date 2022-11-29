@@ -3,16 +3,16 @@
 use yii\db\Migration;
 
 /**
- * Handles the creation of table `{{%publication}}`.
+ * Handles the creation of table `{{%offer}}`.
  */
-class m221129_131409_create_publication_table extends Migration
+class m221129_131409_create_offer_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%publication}}', [
+        $this->createTable('{{%offer}}', [
             'id' => $this->primaryKey(),
             'author_id' => $this->integer()->notNull(),
             'type' => $this->string()->notNull(),
@@ -23,8 +23,8 @@ class m221129_131409_create_publication_table extends Migration
             'creation_date' => $this->timestamp(),
         ]);
 
-        $this->createIndex('idx_publication_author_id', 'publication', 'author_id');
-        $this->addForeignKey('fk_publication_author_id', 'publication', 'author_id', 'user', 'id');
+        $this->createIndex('idx_offer_author_id', 'offer', 'author_id');
+        $this->addForeignKey('fk_offer_author_id', 'offer', 'author_id', 'user', 'id');
     }
 
     /**
@@ -32,8 +32,8 @@ class m221129_131409_create_publication_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropForeignKey('fk_publication_author_id', 'publication');
-        $this->dropIndex('idx_publication_author_id', 'publication');
-        $this->dropTable('{{%publication}}');
+        $this->dropForeignKey('fk_offer_author_id', 'offer');
+        $this->dropIndex('idx_offer_author_id', 'offer');
+        $this->dropTable('{{%offer}}');
     }
 }

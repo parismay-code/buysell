@@ -46,7 +46,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                '/' => 'publications/index',
+                '/' => 'offers/index',
             ],
         ],
     ],

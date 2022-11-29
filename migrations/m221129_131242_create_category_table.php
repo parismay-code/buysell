@@ -16,8 +16,19 @@ class m221129_131242_create_category_table extends Migration
             'id' => $this->primaryKey(),
             'name' => $this->string()->notNull(),
             'label' => $this->string()->notNull(),
-            'image_url' => $this->string(),
         ]);
+
+        $this->batchInsert(
+            'category',
+            ['name', 'label'],
+            [
+                ['home', 'Дом'],
+                ['electronics', 'Электроника'],
+                ['clothes', 'Одежда'],
+                ['sport', 'Спорт/отдых'],
+                ['cars', 'Авто'],
+                ['books', 'Книги'],
+            ]);
     }
 
     /**
