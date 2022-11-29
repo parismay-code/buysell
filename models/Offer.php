@@ -8,7 +8,7 @@ use yii\db\ActiveQuery;
 use yii\base\InvalidConfigException;
 
 /**
- * This is the model class for table "publication".
+ * This is the model class for table "offer".
  *
  * @property int $id
  * @property int $author_id
@@ -22,9 +22,9 @@ use yii\base\InvalidConfigException;
  * @property User $author
  * @property Category[] $categories
  * @property Comment[] $comments
- * @property PublicationCategory[] $publicationCategories
+ * @property OfferCategory[] $offerCategories
  */
-class Publication extends ActiveRecord
+class Offer extends ActiveRecord
 {
     const TYPE_BUY = 'buy';
     const TYPE_SELL = 'sell';
@@ -39,7 +39,7 @@ class Publication extends ActiveRecord
      */
     public static function tableName(): string
     {
-        return 'publication';
+        return 'offer';
     }
 
     /**
@@ -93,7 +93,7 @@ class Publication extends ActiveRecord
      */
     public function getCategories(): ActiveQuery
     {
-        return $this->hasMany(Category::class, ['id' => 'category_id'])->viaTable('publication_category', ['publication_id' => 'id']);
+        return $this->hasMany(Category::class, ['id' => 'category_id'])->viaTable('offer_category', ['offer_id' => 'id']);
     }
 
     /**
@@ -103,16 +103,26 @@ class Publication extends ActiveRecord
      */
     public function getComments(): ActiveQuery
     {
-        return $this->hasMany(Comment::class, ['publication_id' => 'id']);
+        return $this->hasMany(Comment::class, ['offer_id' => 'id']);
     }
 
     /**
-     * Gets query for [[PublicationCategories]].
+     * Gets query for [[OfferCategories]].
      *
      * @return ActiveQuery
      */
-    public function getPublicationCategories(): ActiveQuery
+    public function getOfferCategories(): ActiveQuery
     {
-        return $this->hasMany(PublicationCategory::class, ['publication_id' => 'id']);
+        return $this->hasMany(OfferCategory::class, ['offer_id' => 'id']);
+    }
+
+    /**
+     * Возвращает текстовое значение текущего типа на русском языке
+     *
+     * @return string
+     */
+    public function getType(): string
+    {
+        return self::TYPE_MAP[$this->type];
     }
 }

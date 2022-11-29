@@ -21,7 +21,7 @@ use yii\web\IdentityInterface;
  * @property string|null $auth_key
  *
  * @property Comment[] $comments
- * @property Publication[] $publications
+ * @property Offer[] $offers
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -129,6 +129,6 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getPublications(): ActiveQuery
     {
-        return $this->hasMany(Publication::class, ['author_id' => 'id']);
+        return $this->hasMany(Offer::class, ['author_id' => 'id']);
     }
 }

@@ -17,8 +17,8 @@ use yii\base\InvalidConfigException;
  * @property string|null $creation_date
  *
  * @property User $author
- * @property Publication $publication
- * @property Publication[] $publications
+ * @property Offer $publication
+ * @property Offer[] $offers
  */
 class Comment extends ActiveRecord
 {
@@ -41,7 +41,7 @@ class Comment extends ActiveRecord
             [['text'], 'string'],
             [['creation_date'], 'safe'],
             [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['author_id' => 'id']],
-            [['publication_id'], 'exist', 'skipOnError' => true, 'targetClass' => Publication::class, 'targetAttribute' => ['publication_id' => 'id']],
+            [['publication_id'], 'exist', 'skipOnError' => true, 'targetClass' => Offer::class, 'targetAttribute' => ['publication_id' => 'id']],
         ];
     }
 
@@ -53,7 +53,7 @@ class Comment extends ActiveRecord
         return [
             'id' => 'ID',
             'author_id' => 'Author ID',
-            'publication_id' => 'Publication ID',
+            'publication_id' => 'Offer ID',
             'text' => 'Text',
             'creation_date' => 'Creation Date',
         ];
@@ -70,13 +70,13 @@ class Comment extends ActiveRecord
     }
 
     /**
-     * Gets query for [[Publication]].
+     * Gets query for [[Offer]].
      *
      * @return ActiveQuery
      */
     public function getPublication(): ActiveQuery
     {
-        return $this->hasOne(Publication::class, ['id' => 'publication_id']);
+        return $this->hasOne(Offer::class, ['id' => 'publication_id']);
     }
 
     /**
@@ -88,6 +88,6 @@ class Comment extends ActiveRecord
      */
     public function getPublications(): ActiveQuery
     {
-        return $this->hasMany(Publication::class, ['id' => 'publication_id'])->viaTable('publication_comment', ['comment_id' => 'id']);
+        return $this->hasMany(Offer::class, ['id' => 'publication_id'])->viaTable('publication_comment', ['comment_id' => 'id']);
     }
 }
