@@ -35,6 +35,11 @@ class LoginController extends Controller
         ];
     }
 
+    /**
+     * Возвращает страницу авторизации, обрабатывает AJAX запрос, а также логинит пользователя на сайт
+     *
+     * @return Response|string|array
+     */
     public function actionIndex(): string|array|Response
     {
         if (!Yii::$app->user->isGuest) {
@@ -57,4 +62,15 @@ class LoginController extends Controller
         return $this->render('index', ['model' => $model]);
     }
 
+    /**
+     * Закрывает сессию пользователя, очищает куки и выходит из аккаунта пользователя
+     *
+     * @return Response
+     */
+    public function actionLogout(): Response
+    {
+        Yii::$app->user->logout();
+
+        return $this->goHome();
+    }
 }

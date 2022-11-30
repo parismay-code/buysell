@@ -2,7 +2,10 @@
 
 namespace app\controllers;
 
+use VK\Exceptions\VKApiException;
+use VK\Exceptions\VKClientException;
 use Yii;
+use yii\db\StaleObjectException;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\Response;
@@ -11,6 +14,19 @@ use app\models\VkAuth;
 
 class RegistrationController extends Controller
 {
+
+    /**
+     * Возвращает страницу регистрации, обрабатывает POST запрос и создает аккаунт
+     *
+     * @param string $code
+     *
+     * @throws StaleObjectException
+     * @throws \Throwable
+     * @throws VKApiException
+     * @throws VKClientException
+     *
+     * @return Response|string
+     */
     public function actionIndex(string $code = ''): string|Response
     {
         if (!Yii::$app->user->isGuest) {
