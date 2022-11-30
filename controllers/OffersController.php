@@ -16,25 +16,6 @@ use yii\web\NotFoundHttpException;
 
 class OffersController extends Controller
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function behaviors(): array
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::class,
-                'rules' => [
-                    [
-                        'actions' => ['index'],
-                        'allow' => true,
-                        'roles' => ['?']
-                    ],
-                ],
-            ]
-        ];
-    }
-
     public function actionIndex(): string|Response
     {
         $newOffers = Offer::find()

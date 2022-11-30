@@ -3,10 +3,11 @@
 use yii\web\View;
 use app\assets\AppAsset;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
-/** 
- * @var View $this 
- * @var string $content 
+/**
+ * @var View $this
+ * @var string $content
  */
 
 AppAsset::register($this);
@@ -19,41 +20,49 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => $this->params['meta_k
 $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii::getAlias('@web/favicon.ico')]);
 ?>
 <?php $this->beginPage() ?>
-<!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>" class="h-100">
+    <!DOCTYPE html>
+    <html lang="<?= Yii::$app->language ?>" class="h-100">
 
-<head>
-    <title><?= Html::encode($this->title) ?></title>
-    <?php $this->head() ?>
-</head>
+    <head>
+        <title><?= Html::encode($this->title) ?></title>
+        <?php $this->head() ?>
+    </head>
 
-<body>
+    <body>
     <?php $this->beginBody() ?>
 
-    <header class="header">
+    <header class="header <?= !Yii::$app->user->isGuest ? 'header--logged' : '' ?> ">
         <div class="header__wrapper">
-            <a class="header__logo logo" href="main.html">
-                <img src="img/logo.svg" width="179" height="34" alt="Логотип Куплю Продам">
-            </a>
+            <?= Html::a(
+                Html::img(Yii::getAlias('@web/img/logo.svg'), ['width' => 179, 'height' => 34, 'alt' => 'Логотип Куплю Продам']),
+                Url::to(['offers/index']),
+                ['class' => 'header__logo logo']
+            ); ?>
+
             <nav class="header__user-menu">
                 <ul class="header__list">
                     <li class="header__item">
-                        <a href="my-tickets.html">Публикации</a>
+                        <?= Html::a('Публикации', Url::to(['offers/index'])); ?>
                     </li>
                     <li class="header__item">
-                        <a href="comments.html">Комментарии</a>
+                        <?= Html::a('Комментарии', Url::to(['comments/index'])); ?>
                     </li>
                 </ul>
             </nav>
+
             <form class="search" method="get" action="#" autocomplete="off">
                 <input type="search" name="query" placeholder="Поиск" aria-label="Поиск">
                 <div class="search__icon"></div>
                 <div class="search__close-btn"></div>
             </form>
-            <a class="header__avatar avatar" href="#">
-                <img src="img/avatar.jpg" srcset="img/avatar@2x.jpg 2x" alt="Аватар пользователя">
-            </a>
-            <a class="header__input" href="sign-up.html">Вход и регистрация</a>
+
+            <?= Html::a(
+                Html::img(Yii::$app->user->identity->avatar_url ?? null, ['alt' => 'Аватар пользователя']),
+                Url::to(['offers/index']),
+                ['class' => 'header__avatar avatar']
+            ); ?>
+
+            <?= Html::a('Вход и регистрация', Url::to(['login/index']), ['class' => 'header__input']); ?>
         </div>
     </header>
 
@@ -72,17 +81,19 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 <p class="page-footer__copyright">© 2019 Проект Академии</p>
             </div>
             <div class="page-footer__col">
-                <a href="#" class="page-footer__logo logo">
-                    <img src="img/logo.svg" width="179" height="35" alt="Логотип Куплю Продам">
-                </a>
+                <?= Html::a(
+                    Html::img(Yii::getAlias('@web/img/logo.svg'), ['width' => 179, 'height' => 35, 'alt' => "Логотип Куплю Продам"]),
+                    Url::to(['offers/index']),
+                    ['class' => 'page-footer__logo logo']
+                ); ?>
             </div>
             <div class="page-footer__col">
                 <ul class="page-footer__nav">
                     <li>
-                        <a href="sign-up.html">Вход и регистрация</a>
+                        <?= Html::a('Вход и регистрация', Url::to(['login/index']), ['class' => 'header__input']); ?>
                     </li>
                     <li>
-                        <a href="new-ticket.html">Создать объявление</a>
+                        <?= Html::a('Создать объявление', Url::to(['offers/create']), ['class' => 'header__input']); ?>
                     </li>
                 </ul>
             </div>
@@ -90,7 +101,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     </footer>
 
     <?php $this->endBody() ?>
-</body>
+    </body>
 
-</html>
+    </html>
 <?php $this->endPage() ?>
