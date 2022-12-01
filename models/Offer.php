@@ -30,8 +30,8 @@ class Offer extends ActiveRecord
     const TYPE_SELL = 'sell';
 
     const TYPE_MAP = [
-        self::TYPE_BUY => 'Купить',
-        self::TYPE_SELL => 'Продать'
+        self::TYPE_BUY => 'Куплю',
+        self::TYPE_SELL => 'Продам'
     ];
 
     /**

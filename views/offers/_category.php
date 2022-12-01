@@ -6,7 +6,7 @@ use yii\helpers\Url;
 
 /**
  * @var Category $category
- * @var integer $publicationsCount
+ * @var integer $offersCount
  */
 
 ?>
@@ -18,6 +18,6 @@ use yii\helpers\Url;
                          srcset="<?= Yii::getAlias('@web/img/cat@2x.jpg') ?> 2x" alt="Иконка категории">
                 </span>
         <span class="category-tile__label">
-            <?= Html::encode($category->label) ?> <span class="category-tile__qty js-qty"><?= $publicationsCount ?></span></span>
+            <?= Html::encode($category->label) ?> <span class="category-tile__qty js-qty"><?= $offersCount ?></span></span>
     </a>
 </li>

@@ -50,6 +50,7 @@ $config = [
                 '/' => 'offers/index',
                 'registration' => 'registration/index',
                 'login' => 'login/index',
+                'my' => 'offers/owner',
             ],
         ],
     ],
