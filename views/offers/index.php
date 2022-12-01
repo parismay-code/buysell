@@ -37,7 +37,7 @@ use app\models\Category;
         </div>
         <ul>
             <?php foreach ($newOffers as $offer): ?>
-                <?= $this->render('_offer', ['offer' => $offer]); ?>
+                <?= $this->render('_offer', ['offer' => $offer, 'page' => 'main']); ?>
             <?php endforeach; ?>
         </ul>
     </div>
@@ -50,7 +50,7 @@ use app\models\Category;
         </div>
         <ul>
             <?php foreach ($discussedOffers as $offer): ?>
-                <?= $this->render('_offer', ['offer' => $offer]); ?>
+                <?= $this->render('_offer', ['offer' => $offer, 'page' => 'main']); ?>
             <?php endforeach; ?>
         </ul>
     </div>

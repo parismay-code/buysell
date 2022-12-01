@@ -72,6 +72,6 @@ class File extends ActiveRecord
         $this->url = "/uploads/$name";
         $this->type = $extension;
 
-        return $this->save();
+        return $this->save(false);
     }
 }

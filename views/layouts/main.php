@@ -41,10 +41,10 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 
             <nav class="header__user-menu">
                 <ul class="header__list">
-                    <li class="header__item">
-                        <?= Html::a('Публикации', Url::to(['offers/index'])); ?>
+                    <li class="header__item <?= Url::current() === '/my' ? 'header__item--active' : '' ?>">
+                        <?= Html::a('Публикации', Url::to(['offers/owner'])); ?>
                     </li>
-                    <li class="header__item">
+                    <li class="header__item <?= Url::current() === '/comments' ? 'header__item--active' : '' ?>">
                         <?= Html::a('Комментарии', Url::to(['comments/index'])); ?>
                     </li>
                 </ul>
