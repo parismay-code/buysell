@@ -4,6 +4,7 @@ use yii\web\View;
 use app\models\Offer;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use app\helpers\DateHelpers;
 
 /**
  * @var View $this
@@ -33,7 +34,7 @@ $user = Yii::$app->user->identity;
                 <div class="ticket__data">
                     <p>
                         <b>Дата добавления:</b>
-                        <span><?= $offer->creation_date ?></span>
+                        <span><?= DateHelpers::formatDate($offer->creation_date); ?></span>
                     </p>
                     <p>
                         <b>Автор:</b>
@@ -65,42 +66,53 @@ $user = Yii::$app->user->identity;
             </div>
         </div>
         <div class="ticket__comments">
+            <?php if (Yii::$app->user->isGuest): ?>
+                <div class="ticket__warning">
+                    <p>Отправка комментариев доступна <br>только для зарегистрированных пользователей.</p>
+                    <?= Html::a('Вход и регистрация', Url::to(['login/index']), ['class' => 'btn btn--big']); ?>
+                </div>
+            <?php endif; ?>
             <h2 class="ticket__subtitle">Комментарии</h2>
-            <div class="ticket__comment-form">
-                <form action="#" method="post" class="form comment-form">
-                    <div class="comment-form__header">
-                        <a href="<?= Url::to(['user/view/?id=' . $user->id]) ?>" class="comment-form__avatar avatar">
-                            <img src="<?= $user->avatar_url ?>" alt="Аватар пользователя">
-                        </a>
-                        <p class="comment-form__author">Вам слово</p>
-                    </div>
-                    <div class="comment-form__field">
-                        <div class="form__field">
-                            <textarea name="comment" id="comment-field" cols="30" rows="10" class="js-field">Нормальное вообще кресло! А как насч</textarea>
-                            <label for="comment-field">Текст комментария</label>
-                            <span>Обязательное поле</span>
+            <?php if (!Yii::$app->user->isGuest): ?>
+                <div class="ticket__comment-form">
+                    <form action="#" method="post" class="form comment-form">
+                        <div class="comment-form__header">
+                            <a href="<?= Url::to(['user/view/?id=' . $user->id]) ?>"
+                               class="comment-form__avatar avatar">
+                                <img src="<?= $user->avatar_url ?>" alt="Аватар пользователя">
+                            </a>
+                            <p class="comment-form__author">Вам слово</p>
                         </div>
-                    </div>
-                    <button class="comment-form__button btn btn--white js-button" type="submit" disabled="">Отправить
-                    </button>
-                </form>
-            </div>
+                        <div class="comment-form__field">
+                            <div class="form__field">
+                                <textarea name="comment" id="comment-field" cols="30" rows="10" class="js-field">Нормальное вообще кресло! А как насч</textarea>
+                                <label for="comment-field">Текст комментария</label>
+                                <span>Обязательное поле</span>
+                            </div>
+                        </div>
+                        <button class="comment-form__button btn btn--white js-button" type="submit" disabled="">
+                            Отправить
+                        </button>
+                    </form>
+                </div>
+            <?php endif; ?>
             <div class="ticket__comments-list">
                 <ul class="comments-list">
                     <?php foreach ($offer->comments as $comment): ?>
-                    <li>
-                        <div class="comment-card">
-                            <div class="comment-card__header">
-                                <a href="<?= Url::to(['user/view/?id=' . $comment->author_id]) ?>" class="comment-card__avatar avatar">
-                                    <img src="<?= $comment->author->avatar_url ?>" alt="Аватар пользователя">
-                                </a>
-                                <p class="comment-card__author"><?= Html::encode($comment->author->username) ?></p>
+                        <li>
+                            <div class="comment-card">
+                                <div class="comment-card__header">
+                                    <a href="<?= Url::to(['user/view/?id=' . $comment->author_id]) ?>"
+                                       class="comment-card__avatar avatar">
+                                        <img src="<?= $comment->author->avatar_url ?>" alt="Аватар пользователя">
+                                    </a>
+                                    <p class="comment-card__author"><?= Html::encode($comment->author->username) ?></p>
+                                </div>
+                                <div class="comment-card__content">
+                                    <p><?= $comment->text ?></p>
+                                </div>
                             </div>
-                            <div class="comment-card__content">
-                                <p><?= $comment->text ?></p>
-                            </div>
-                        </div>
-                    </li>
+                        </li>
                     <?php endforeach; ?>
                 </ul>
             </div>

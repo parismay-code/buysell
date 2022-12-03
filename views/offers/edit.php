@@ -17,12 +17,12 @@ $categoryItems = ArrayHelper::map($categories, 'id', 'label');
 
 <section class="ticket-form">
     <div class="ticket-form__wrapper">
-        <h1 class="ticket-form__title">Новая публикация</h1>
+        <h1 class="ticket-form__title">Редактировать публикацию</h1>
         <div class="ticket-form__tile">
             <?= $this->render('_offerForm', [
                 'model' => $model,
                 'categoryItems' => $categoryItems,
-                'submitTitle' => 'Опубликовать',
+                'submitTitle' => 'Сохранить',
             ]); ?>
         </div>
     </div>
