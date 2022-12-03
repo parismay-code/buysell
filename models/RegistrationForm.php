@@ -86,8 +86,19 @@ class RegistrationForm extends Model
         return false;
     }
 
+    public function isVkExist(int $vkId): User|null
+    {
+        return User::findOne(['vk_id' => $vkId]);
+    }
+
     public function vkRegister(array $data): bool
     {
+        $isVkExist = $this->isVkExist($data['id']);
+
+        if ($isVkExist) {
+            return Yii::$app->user->login($isVkExist);
+        }
+
         $user = new User();
 
         $user->vk_id = $data['id'] ?? null;

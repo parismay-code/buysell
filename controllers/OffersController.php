@@ -33,12 +33,20 @@ class OffersController extends Controller
                     [
                         'actions' => ['owner', 'create', 'delete'],
                         'allow' => true,
-                        'roles' => ['@']
-                    ]
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['edit'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function () {
+                            $offer = Offer::findOne(Yii::$app->request->get('id'));
+
+                            return $offer?->author_id === Yii::$app->user->id;
+                        }
+                    ],
                 ],
-                'denyCallback' => function ($rule, $action) {
-                    Yii::$app->response->redirect(['login/index']);
-                }
+                'denyCallback' => fn() => Yii::$app->response->redirect(['login/index']),
             ]
         ];
     }
@@ -96,6 +104,29 @@ class OffersController extends Controller
         $offer->delete();
 
         return $this->redirect(Url::to(['offers/owner']));
+    }
+
+    public function actionEdit(int $id): string|Response
+    {
+        try {
+            $offer = Offer::findOne($id);
+
+            if (!$offer) {
+                throw new NotFoundHttpException();
+            }
+
+            $model = new OfferForm();
+
+            $categories = Category::find()->all();
+
+            if ($model->load($this->request->post()) && $model->change($id)) {
+                return $this->redirect(Url::to(['offers/owner']));
+            }
+
+            return $this->render('edit', ['offer' => $offer, 'model' => $model, 'categories' => $categories]);
+        } catch (NotFoundHttpException $e) {
+            return $this->render(Url::to(['error/404']));
+        }
     }
 
     public function actionView(int $id): string|Response

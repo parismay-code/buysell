@@ -9,6 +9,11 @@ use yii\helpers\Url;
  * @var string $page
  */
 
+$offerRedirectUrl = match (Url::current()) {
+    '/my' => Url::to(['offers/edit', 'id' => $offer->id]),
+    default => Url::to(['offers/view', 'id' => $offer->id]),
+}
+
 ?>
 
 <li class="tickets-list__item js-card">
@@ -25,7 +30,7 @@ use yii\helpers\Url;
             </div>
             <div class="ticket-card__header">
                 <h3 class="ticket-card__title">
-                    <a href="<?= Url::to(['offers/view/?id=' . $offer->id]) ?>">
+                    <a href="<?= $offerRedirectUrl ?>">
                         <?= Html::encode($offer->title) ?>
                     </a>
                 </h3>

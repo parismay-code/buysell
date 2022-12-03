@@ -111,6 +111,23 @@ class OfferForm extends Model
             $offer->image_url = $file->url;
         }
 
-        return $offer->update(false);
+        if ($offer->update(false)) {
+            $offerCategories = OfferCategory::findAll(['offer_id' => $offer->id]);
+
+            foreach ($offerCategories as $offerCategory) {
+                $offerCategory->delete();
+            }
+
+            foreach ($this->categories as $category) {
+                $offerCategory = new OfferCategory();
+
+                $offerCategory->offer_id = $offer->id;
+                $offerCategory->category_id = $category;
+
+                $offerCategory->save(false);
+            }
+
+            return true;
+        }
     }
 }
