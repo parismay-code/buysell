@@ -594,7 +594,8 @@ img {
     height: auto
 }
 
-.visually-hidden {
+.visually-hidden,
+.pagination .disabled {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -1455,7 +1456,7 @@ input:checked + .switch__button {
     border-radius: 50%
 }
 
-.pagination a.active {
+.pagination li.active a {
     color: #fff;
     background-color: #2b51a6
 }

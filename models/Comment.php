@@ -12,13 +12,12 @@ use yii\base\InvalidConfigException;
  *
  * @property int $id
  * @property int $author_id
- * @property int $publication_id
+ * @property int $offer_id
  * @property string $text
  * @property string|null $creation_date
  *
  * @property User $author
- * @property Offer $publication
- * @property Offer[] $offers
+ * @property Offer $offer
  */
 class Comment extends ActiveRecord
 {
@@ -36,12 +35,12 @@ class Comment extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['author_id', 'publication_id', 'text'], 'required'],
-            [['author_id', 'publication_id'], 'integer'],
+            [['author_id', 'offer_id', 'text'], 'required'],
+            [['author_id', 'offer_id'], 'integer'],
             [['text'], 'string'],
             [['creation_date'], 'safe'],
             [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['author_id' => 'id']],
-            [['publication_id'], 'exist', 'skipOnError' => true, 'targetClass' => Offer::class, 'targetAttribute' => ['publication_id' => 'id']],
+            [['offer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Offer::class, 'targetAttribute' => ['offer_id' => 'id']],
         ];
     }
 
@@ -53,7 +52,7 @@ class Comment extends ActiveRecord
         return [
             'id' => 'ID',
             'author_id' => 'Author ID',
-            'publication_id' => 'Offer ID',
+            'offer_id' => 'Offer ID',
             'text' => 'Text',
             'creation_date' => 'Creation Date',
         ];
@@ -74,20 +73,8 @@ class Comment extends ActiveRecord
      *
      * @return ActiveQuery
      */
-    public function getPublication(): ActiveQuery
+    public function getOffer(): ActiveQuery
     {
-        return $this->hasOne(Offer::class, ['id' => 'publication_id']);
-    }
-
-    /**
-     * Gets query for [[Publications]].
-     *
-     * @throws InvalidConfigException
-     *
-     * @return ActiveQuery
-     */
-    public function getPublications(): ActiveQuery
-    {
-        return $this->hasMany(Offer::class, ['id' => 'publication_id'])->viaTable('publication_comment', ['comment_id' => 'id']);
+        return $this->hasOne(Offer::class, ['id' => 'offer_id']);
     }
 }

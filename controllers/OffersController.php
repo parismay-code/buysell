@@ -2,7 +2,9 @@
 
 namespace app\controllers;
 
+use app\models\OfferCategory;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\Response;
@@ -10,11 +12,10 @@ use yii\filters\AccessControl;
 use app\models\Category;
 use app\models\Offer;
 use app\models\OfferForm;
+use app\models\CommentForm;
 use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
 
-/**
- * @var $this Yii
- */
 class OffersController extends Controller
 {
     /**
@@ -27,23 +28,13 @@ class OffersController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['index', 'view'],
+                        'actions' => ['index', 'view', 'category'],
                         'allow' => true
                     ],
                     [
-                        'actions' => ['owner', 'create', 'delete'],
+                        'actions' => ['owner', 'create', 'delete', 'edit'],
                         'allow' => true,
                         'roles' => ['@'],
-                    ],
-                    [
-                        'actions' => ['edit'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function () {
-                            $offer = Offer::findOne(Yii::$app->request->get('id'));
-
-                            return $offer?->author_id === Yii::$app->user->id;
-                        }
                     ],
                 ],
                 'denyCallback' => fn() => Yii::$app->response->redirect(['login/index']),
@@ -59,14 +50,13 @@ class OffersController extends Controller
             ->all();
 
         $discussedOffers = Offer::find()
+            ->leftJoin('(SELECT offer_id, COUNT(*) count from comment GROUP BY offer_id) comment', 'offer.id = comment.offer_id')
+            ->andWhere('comment.count is not null')
+            ->orderBy('comment.count DESC')
             ->limit(8)
             ->all();
 
         $categories = Category::find()->all();
-
-        if (!$newOffers) {
-            return $this->render('blank');
-        }
 
         return $this->render('index', [
             'newOffers' => $newOffers,
@@ -75,12 +65,53 @@ class OffersController extends Controller
         ]);
     }
 
+    public function actionCategory(int $id): string
+    {
+        $category = Category::findOne($id);
+
+        if (!$category || count($category->offers) === 0) {
+            throw new NotFoundHttpException();
+        }
+
+        $query = OfferCategory::find()
+            ->leftJoin('offer', 'offer_category.offer_id = offer.id')
+            ->andFilterWhere(['category_id' => $id])
+            ->orderBy('offer.id DESC');
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 8,
+            ]
+        ]);
+
+        $categories = Category::find()->all();
+
+
+        return $this->render('category', [
+            'dataProvider' => $dataProvider,
+            'category' => $category,
+            'categories' => $categories
+        ]);
+    }
+
     public function actionOwner(): string
     {
         $offers = Offer::findAll(['author_id' => Yii::$app->user->id]);
 
+        $query = Offer::find()
+            ->where(['author_id' => Yii::$app->user->id])
+            ->orderBy('id DESC');
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 8,
+            ]
+        ]);
+
         return $this->render('owner', [
-            'offers' => $offers
+            'dataProvider' => $dataProvider
         ]);
     }
 
@@ -101,6 +132,14 @@ class OffersController extends Controller
     {
         $offer = Offer::findOne($id);
 
+        if (!$offer) {
+            throw new NotFoundHttpException();
+        }
+
+        if ($offer?->author_id !== Yii::$app->user->id) {
+            throw new ForbiddenHttpException();
+        }
+
         $offer->delete();
 
         return $this->redirect(Url::to(['offers/owner']));
@@ -108,39 +147,41 @@ class OffersController extends Controller
 
     public function actionEdit(int $id): string|Response
     {
-        try {
-            $offer = Offer::findOne($id);
+        $offer = Offer::findOne($id);
 
-            if (!$offer) {
-                throw new NotFoundHttpException();
-            }
-
-            $model = new OfferForm();
-
-            $categories = Category::find()->all();
-
-            if ($model->load($this->request->post()) && $model->change($id)) {
-                return $this->redirect(Url::to(['offers/owner']));
-            }
-
-            return $this->render('edit', ['offer' => $offer, 'model' => $model, 'categories' => $categories]);
-        } catch (NotFoundHttpException $e) {
-            return $this->render(Url::to(['error/404']));
+        if (!$offer) {
+            throw new NotFoundHttpException();
         }
+
+        if ($offer->author_id !== Yii::$app->user->id) {
+            throw new ForbiddenHttpException();
+        }
+
+        $model = new OfferForm();
+
+        $categories = Category::find()->all();
+
+        if ($model->load($this->request->post()) && $model->change($id)) {
+            return $this->redirect(Url::to(['offers/owner']));
+        }
+
+        return $this->render('edit', ['offer' => $offer, 'model' => $model, 'categories' => $categories]);
     }
 
     public function actionView(int $id): string|Response
     {
-        try {
-            $offer = Offer::findOne($id);
+        $offer = Offer::findOne($id);
 
-            if (!$offer) {
-                throw new NotFoundHttpException();
-            }
-
-            return $this->render('view', ['offer' => $offer]);
-        } catch (NotFoundHttpException $e) {
-            return $this->redirect(Url::to(['error/404']));
+        if (!$offer) {
+            throw new NotFoundHttpException();
         }
+
+        $model = new CommentForm();
+
+        if ($model->load($this->request->post()) && $model->comment()) {
+            return $this->redirect(Url::to(['offers/view', 'id' => $id]));
+        }
+
+        return $this->render('view', ['offer' => $offer, 'model' => $model]);
     }
 }

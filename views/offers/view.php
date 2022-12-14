@@ -2,13 +2,16 @@
 
 use yii\web\View;
 use app\models\Offer;
+use app\models\CommentForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\helpers\DateHelpers;
+use yii\widgets\ActiveForm;
 
 /**
  * @var View $this
  * @var Offer $offer
+ * @var CommentForm $model
  */
 
 $user = Yii::$app->user->identity;
@@ -75,34 +78,39 @@ $user = Yii::$app->user->identity;
             <h2 class="ticket__subtitle">Комментарии</h2>
             <?php if (!Yii::$app->user->isGuest): ?>
                 <div class="ticket__comment-form">
-                    <form action="#" method="post" class="form comment-form">
-                        <div class="comment-form__header">
-                            <a href="<?= Url::to(['user/view/?id=' . $user->id]) ?>"
-                               class="comment-form__avatar avatar">
-                                <img src="<?= $user->avatar_url ?>" alt="Аватар пользователя">
-                            </a>
-                            <p class="comment-form__author">Вам слово</p>
-                        </div>
-                        <div class="comment-form__field">
-                            <div class="form__field">
-                                <textarea name="comment" id="comment-field" cols="30" rows="10" class="js-field">Нормальное вообще кресло! А как насч</textarea>
-                                <label for="comment-field">Текст комментария</label>
-                                <span>Обязательное поле</span>
-                            </div>
-                        </div>
-                        <button class="comment-form__button btn btn--white js-button" type="submit" disabled="">
-                            Отправить
-                        </button>
-                    </form>
+                    <?php $form = ActiveForm::begin([
+                        'errorCssClass' => 'form__field--invalid',
+                        'fieldConfig' => [
+                            'template' => '{input}{label}{error}',
+                            'options' => ['class' => 'form__field'],
+                            'inputOptions' => ['class' => 'js-field'],
+                            'errorOptions' => ['tag' => 'span'],
+                        ],
+                        'options' => ['class' => 'form comment-form', 'autocomplete' => 'off']
+                    ]); ?>
+                    <div class="comment-form__header">
+                        <a href="#" class="comment-form__avatar avatar">
+                            <img src="<?= $user->avatar_url ?>" alt="Аватар пользователя">
+                        </a>
+                        <p class="comment-form__author">Вам слово</p>
+                    </div>
+                    <?= Html::activeHiddenInput($model, 'offerId', ['value' => $offer->id]) ?>
+
+                    <div class="comment-form__field">
+                        <?= $form->field($model, 'text')
+                            ->textarea(['cols' => 30, 'rows' => 10]); ?>
+                    </div>
+                    <?= Html::submitButton('Отправить', ['class' => 'comment-form__button btn btn--white js-button']); ?>
+                    <?php ActiveForm::end(); ?>
                 </div>
             <?php endif; ?>
             <div class="ticket__comments-list">
                 <ul class="comments-list">
-                    <?php foreach ($offer->comments as $comment): ?>
+                    <?php foreach (array_reverse($offer->comments) as $comment): ?>
                         <li>
                             <div class="comment-card">
                                 <div class="comment-card__header">
-                                    <a href="<?= Url::to(['user/view/?id=' . $comment->author_id]) ?>"
+                                    <a href="#"
                                        class="comment-card__avatar avatar">
                                         <img src="<?= $comment->author->avatar_url ?>" alt="Аватар пользователя">
                                     </a>

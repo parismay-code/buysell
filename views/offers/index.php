@@ -3,6 +3,8 @@
 use yii\web\View;
 use app\models\Offer;
 use app\models\Category;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 /**
  * @var View $this ;
@@ -29,29 +31,49 @@ use app\models\Category;
         <?php endforeach; ?>
     </ul>
 </section>
-<section class="tickets-list">
-    <h2 class="visually-hidden">Самые новые предложения</h2>
-    <div class="tickets-list__wrapper">
-        <div class="tickets-list__header">
-            <p class="tickets-list__title">Самое свежее</p>
+<?php if (count($newOffers) > 0 || count($discussedOffers) > 0): ?>
+    <?php if (count($newOffers) > 0): ?>
+        <section class="tickets-list">
+            <h2 class="visually-hidden">Самые новые предложения</h2>
+            <div class="tickets-list__wrapper">
+                <div class="tickets-list__header">
+                    <p class="tickets-list__title">Самое свежее</p>
+                </div>
+                <ul>
+                    <?php foreach ($newOffers as $offer): ?>
+                        <li class="tickets-list__item js-card">
+                            <?= $this->render('_offer', ['model' => $offer, 'page' => 'main']); ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        </section>
+    <?php endif; ?>
+    <?php if (count($discussedOffers) > 0): ?>
+        <section class="tickets-list">
+            <h2 class="visually-hidden">Самые обсуждаемые предложения</h2>
+            <div class="tickets-list__wrapper">
+                <div class="tickets-list__header">
+                    <p class="tickets-list__title">Самые обсуждаемые</p>
+                </div>
+                <ul>
+                    <?php foreach ($discussedOffers as $offer): ?>
+                        <li class="tickets-list__item js-card">
+                            <?= $this->render('_offer', ['model' => $offer, 'page' => 'main']); ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        </section>
+    <?php endif; ?>
+<?php else: ?>
+    <div class="message">
+        <div class="message__text">
+            <p>На сайте еще не опубликовано ни&nbsp;одного объявления.</p>
         </div>
-        <ul>
-            <?php foreach ($newOffers as $offer): ?>
-                <?= $this->render('_offer', ['offer' => $offer, 'page' => 'main']); ?>
-            <?php endforeach; ?>
-        </ul>
+
+        <?php if (Yii::$app->user->isGuest): ?>
+            <?= Html::a('Вход и регистрация', Url::to(['login/index']), ['class' => 'message__link btn btn--big']); ?>
+        <?php endif; ?>
     </div>
-</section>
-<section class="tickets-list">
-    <h2 class="visually-hidden">Самые обсуждаемые предложения</h2>
-    <div class="tickets-list__wrapper">
-        <div class="tickets-list__header">
-            <p class="tickets-list__title">Самые обсуждаемые</p>
-        </div>
-        <ul>
-            <?php foreach ($discussedOffers as $offer): ?>
-                <?= $this->render('_offer', ['offer' => $offer, 'page' => 'main']); ?>
-            <?php endforeach; ?>
-        </ul>
-    </div>
-</section>
+<?php endif; ?>
