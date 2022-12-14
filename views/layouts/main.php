@@ -24,7 +24,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     <html lang="<?= Yii::$app->language ?>" class="h-100">
 
     <head>
-        <title><?= Html::encode($this->title) ?></title>
+        <title>Куплю Продам</title>
         <?php $this->head() ?>
     </head>
 
@@ -44,7 +44,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                     <li class="header__item <?= Url::current() === '/my' ? 'header__item--active' : '' ?>">
                         <?= Html::a('Публикации', Url::to(['offers/owner'])); ?>
                     </li>
-                    <li class="header__item <?= Url::current() === '/comments' ? 'header__item--active' : '' ?>">
+                    <li class="header__item <?= Url::current() === '/my/comments' ? 'header__item--active' : '' ?>">
                         <?= Html::a('Комментарии', Url::to(['comments/index'])); ?>
                     </li>
                 </ul>

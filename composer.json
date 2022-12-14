@@ -1,6 +1,6 @@
 {
     "name": "parismay-code/buysell",
-    "description": "HTML Academy Акселератор",
+    "description": "Доска объявлений — современный веб-сайт, упрощающий продажу или покупку абсолютно любых вещей.",
     "keywords": ["yii2", "HTML", "Academy", "backend", "php", "marketplace"],
     "type": "project",
     "license": "BSD-3-Clause",
