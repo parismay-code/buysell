@@ -50,7 +50,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 </ul>
             </nav>
 
-            <form class="search" method="get" action="#" autocomplete="off">
+            <form class="search" method="get" action="<?= Url::to(['offers/search']) ?>" autocomplete="off">
                 <input type="search" name="query" placeholder="Поиск" aria-label="Поиск">
                 <div class="search__icon"></div>
                 <div class="search__close-btn"></div>
