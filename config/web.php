@@ -52,6 +52,7 @@ $config = [
                 'login' => 'login/index',
                 'my' => 'offers/owner',
                 'my/comments' => 'comments/index',
+                'search' => 'offers/search'
             ],
         ],
     ],

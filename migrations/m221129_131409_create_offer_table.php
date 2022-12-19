@@ -25,6 +25,8 @@ class m221129_131409_create_offer_table extends Migration
 
         $this->createIndex('idx_offer_author_id', 'offer', 'author_id');
         $this->addForeignKey('fk_offer_author_id', 'offer', 'author_id', 'user', 'id');
+
+        $this->execute('ALTER TABLE offer ADD FULLTEXT title_fulltext (`title`)');
     }
 
     /**

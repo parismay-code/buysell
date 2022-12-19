@@ -28,7 +28,7 @@ class OffersController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'category'],
+                        'actions' => ['index', 'view', 'category', 'search'],
                         'allow' => true
                     ],
                     [
@@ -63,6 +63,27 @@ class OffersController extends Controller
             'discussedOffers' => $discussedOffers,
             'categories' => $categories
         ]);
+    }
+
+    public function actionSearch(): string
+    {
+        $query = Offer::find()
+            ->where('MATCH(title) AGAINST (:search_query)')
+            ->addParams(['search_query' => $this->request->get('query') ?? '']);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 8,
+            ]
+        ]);
+
+        $newOffers = Offer::find()
+            ->orderBy('id DESC')
+            ->limit(8)
+            ->all();
+
+        return $this->render('search', ['dataProvider' => $dataProvider, 'newOffers' => $newOffers]);
     }
 
     public function actionCategory(int $id): string
