@@ -3,6 +3,7 @@
 use yii\web\View;
 use app\models\Offer;
 use app\models\CommentForm;
+use app\models\ChatForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\helpers\DateHelpers;
@@ -11,7 +12,8 @@ use yii\widgets\ActiveForm;
 /**
  * @var View $this
  * @var Offer $offer
- * @var CommentForm $model
+ * @var CommentForm $commentModel
+ * @var ChatForm $chatModel
  */
 
 $user = Yii::$app->user->identity;
@@ -55,7 +57,7 @@ $user = Yii::$app->user->identity;
                 <ul class="ticket__tags">
                     <?php foreach ($offer->categories as $category): ?>
                         <li>
-                            <a href="<?= Url::to(['offers/category/?id=' . $category->id]) ?>"
+                            <a href="<?= Url::to(['offers/category/', 'id' => $category->id]) ?>"
                                class="category-tile category-tile--small">
                                 <span class="category-tile__image">
                                     <img src="<?= Yii::getAlias('@web/img/cat.jpg') ?>"
@@ -94,10 +96,10 @@ $user = Yii::$app->user->identity;
                         </a>
                         <p class="comment-form__author">Вам слово</p>
                     </div>
-                    <?= Html::activeHiddenInput($model, 'offerId', ['value' => $offer->id]) ?>
+                    <?= Html::activeHiddenInput($commentModel, 'offerId', ['value' => $offer->id]) ?>
 
                     <div class="comment-form__field">
-                        <?= $form->field($model, 'text')
+                        <?= $form->field($commentModel, 'text')
                             ->textarea(['cols' => 30, 'rows' => 10]); ?>
                     </div>
                     <?= Html::submitButton('Отправить', ['class' => 'comment-form__button btn btn--white js-button']); ?>
@@ -128,3 +130,5 @@ $user = Yii::$app->user->identity;
         <button class="chat-button" type="button" aria-label="Открыть окно чата"></button>
     </div>
 </section>
+
+<?= $this->render('_chat', ['model' => $chatModel, 'offer' => $offer]); ?>

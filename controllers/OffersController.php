@@ -2,7 +2,6 @@
 
 namespace app\controllers;
 
-use app\models\OfferCategory;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\helpers\Url;
@@ -10,9 +9,11 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\AccessControl;
 use app\models\Category;
+use app\models\OfferCategory;
 use app\models\Offer;
 use app\models\OfferForm;
 use app\models\CommentForm;
+use app\models\ChatForm;
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
 
@@ -197,12 +198,17 @@ class OffersController extends Controller
             throw new NotFoundHttpException();
         }
 
-        $model = new CommentForm();
+        $commentModel = new CommentForm();
+        $chatModel = new ChatForm();
 
-        if ($model->load($this->request->post()) && $model->comment()) {
+        if ($commentModel->load($this->request->post()) && $commentModel->comment()) {
             return $this->redirect(Url::to(['offers/view', 'id' => $id]));
         }
 
-        return $this->render('view', ['offer' => $offer, 'model' => $model]);
+        if ($chatModel->load($this->request->post())) {
+            $chatModel->send();
+        }
+
+        return $this->render('view', ['offer' => $offer, 'commentModel' => $commentModel, 'chatModel' => $chatModel]);
     }
 }
