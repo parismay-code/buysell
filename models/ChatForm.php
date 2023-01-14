@@ -50,8 +50,6 @@ class ChatForm extends Model
 
         $chat->createMessage($this->authorId, $this->offerId, $this->text);
 
-        echo 1;
-
         return true;
     }
 }
