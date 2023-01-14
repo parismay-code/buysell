@@ -205,9 +205,12 @@ class OffersController extends Controller
             return $this->redirect(Url::to(['offers/view', 'id' => $id]));
         }
 
-        if ($chatModel->load($this->request->post())) {
-            $chatModel->send();
+        if ($chatModel->load($this->request->post()) && $chatModel->send()) {
+            return $this->redirect(Url::to(['offers/view', 'id' => $id]));
         }
+
+        $chatModel->text = null;
+        $commentModel->text = null;
 
         return $this->render('view', ['offer' => $offer, 'commentModel' => $commentModel, 'chatModel' => $chatModel]);
     }

@@ -20,7 +20,7 @@ $chat = new Chat();
 <section class="chat visually-hidden">
     <h2 class="chat__subtitle">Чат с продавцом</h2>
     <ul class="chat__conversation">
-        <?php foreach ($chat->getMessages() as $message): ?>
+        <?php foreach ($chat->getMessages($offer) as $message): ?>
             <li class="chat__message">
                 <div class="chat__message-title">
                     <span class="chat__message-author">
