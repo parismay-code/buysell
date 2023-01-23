@@ -5,7 +5,6 @@ namespace app\models;
 use Yii;
 use yii\web\UploadedFile;
 use yii\base\Model;
-use app\validators\ClearStringValidator;
 use yii\db\StaleObjectException;
 
 class RegistrationForm extends Model
@@ -25,7 +24,7 @@ class RegistrationForm extends Model
             [['username', 'email'], 'string'],
             [['username', 'email', 'password', 'passwordRepeat'], 'required'],
             [['avatar'], 'file', 'maxFiles' => 1],
-            [['username'], ClearStringValidator::class],
+            [['username'], 'match', '/([A-Z,a-z,А-Я,а-я,Ё,ё])/'],
             [['email'], 'email'],
             [['email'], 'unique', 'targetClass' => User::class, 'targetAttribute' => 'email'],
             [['password', 'passwordRepeat'], 'string', 'min' => 6],

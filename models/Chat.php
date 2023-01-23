@@ -28,14 +28,14 @@ class Chat extends Model
             'text' => $text,
             'user_id' => Yii::$app->user->id,
             'creation_date' => date('Y-m-d H:i:s', time()),
-            'offer_id-author_id' => $offerId . ' ' . Yii::$app->user->id
+            'offer_id__author_id' => $offerId . ' ' . Yii::$app->user->id
         ]);
     }
 
     function getMessages(Offer $offer): array
     {
         return $this->reference
-                ->orderByChild('offer_id-author_id')
+                ->orderByChild('offer_id__author_id')
                 ->equalTo($offer->id . ' ' . Yii::$app->user->id)
                 ->getValue() ?? [];
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\helpers;
+namespace app\src\helpers;
 
 class NormalizeHelpers
 {

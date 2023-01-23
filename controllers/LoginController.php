@@ -23,7 +23,8 @@ class LoginController extends Controller
                 'rules' => [
                     [
                         'actions' => ['index'],
-                        'allow' => true
+                        'allow' => true,
+                        'roles' => ['?']
                     ],
                     [
                         'actions' => ['logout'],
@@ -38,14 +39,10 @@ class LoginController extends Controller
     /**
      * Возвращает страницу авторизации, обрабатывает AJAX запрос, а также логинит пользователя на сайт
      *
-     * @return Response|string|array
+     * @return mixed
      */
-    public function actionIndex(): string|array|Response
+    public function actionIndex(): mixed
     {
-        if (!Yii::$app->user->isGuest) {
-            Yii::$app->user->logout();
-        }
-
         $model = new LoginForm();
 
         if ($this->request->isAjax && $model->load($this->request->post())) {

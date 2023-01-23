@@ -44,12 +44,12 @@ $chat = new Chat();
         'options' => ['class' => 'chat__form']
     ]); ?>
 
-        <?= Html::activeHiddenInput($model, 'authorId', ['value' => $offer->author_id]); ?>
-        <?= Html::activeHiddenInput($model, 'offerId', ['value' => $offer->id]); ?>
+    <?= Html::activeHiddenInput($model, 'authorId', ['value' => $offer->author_id]); ?>
+    <?= Html::activeHiddenInput($model, 'offerId', ['value' => $offer->id]); ?>
 
-        <?= $form->field($model, 'text')
-                ->textarea(['class' => 'chat__form-message', 'placeholder' => 'Ваше сообщение']); ?>
+    <?= $form->field($model, 'text')
+        ->textarea(['class' => 'chat__form-message', 'placeholder' => 'Ваше сообщение']); ?>
 
-        <?= Html::submitButton(' ', ['class' => 'chat__form-button', 'aria-label' => 'Отправить сообщение в чат']); ?>
+    <?= Html::submitButton(' ', ['class' => 'chat__form-button', 'aria-label' => 'Отправить сообщение в чат']); ?>
     <?php ActiveForm::end(); ?>
 </section>
