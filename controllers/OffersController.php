@@ -16,6 +16,7 @@ use app\models\CommentForm;
 use app\models\ChatForm;
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
+use yii\widgets\ActiveForm;
 
 class OffersController extends Controller
 {
@@ -137,7 +138,7 @@ class OffersController extends Controller
         ]);
     }
 
-    public function actionCreate(): string|Response
+    public function actionCreate(): mixed
     {
         $model = new OfferForm();
 
@@ -167,7 +168,7 @@ class OffersController extends Controller
         return $this->redirect(Url::to(['offers/owner']));
     }
 
-    public function actionEdit(int $id): string|Response
+    public function actionEdit(int $id): mixed
     {
         $offer = Offer::findOne($id);
 
@@ -190,7 +191,7 @@ class OffersController extends Controller
         return $this->render('edit', ['offer' => $offer, 'model' => $model, 'categories' => $categories]);
     }
 
-    public function actionView(int $id): string|Response
+    public function actionView(int $id): mixed
     {
         $offer = Offer::findOne($id);
 

@@ -10,6 +10,8 @@ use yii\helpers\Url;
  * @var string $content
  */
 
+Yii::$app->language = 'ru_RU';
+
 AppAsset::register($this);
 
 $this->registerCsrfMetaTags();
@@ -57,7 +59,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             </form>
 
             <?= Html::a(
-                Html::img(Yii::$app->user->identity->avatar_url ?? null, ['alt' => 'Аватар пользователя']),
+                Html::img(Yii::$app->user->identity->avatar_url ?? Yii::getAlias('@web/img/placeholder.png'), ['alt' => 'Аватар пользователя']),
                 Url::to(['offers/index']),
                 ['class' => 'header__avatar avatar']
             ); ?>
@@ -89,9 +91,15 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             </div>
             <div class="page-footer__col">
                 <ul class="page-footer__nav">
-                    <li>
-                        <?= Html::a('Вход и регистрация', Url::to(['login/index']), ['class' => 'header__input']); ?>
-                    </li>
+                    <?php if (Yii::$app->user->isGuest): ?>
+                        <li>
+                            <?= Html::a('Вход и регистрация', Url::to(['login/index']), ['class' => 'header__input']); ?>
+                        </li>
+                    <?php else: ?>
+                        <li>
+                            <?= Html::a('Выход', Url::to(['login/logout']), ['class' => 'header__input']); ?>
+                        </li>
+                    <?php endif; ?>
                     <li>
                         <?= Html::a('Создать объявление', Url::to(['offers/create']), ['class' => 'header__input']); ?>
                     </li>

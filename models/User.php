@@ -25,6 +25,8 @@ use yii\web\IdentityInterface;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
+    public string $loginUrl = 'login/index';
+
     /**
      * {@inheritdoc}
      */
@@ -67,7 +69,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * {@inheritdoc}
      */
-    public static function findIdentity($id): User|null
+    public static function findIdentity($id): ?User
     {
         return self::findOne($id);
     }
@@ -75,7 +77,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * {@inheritdoc}
      */
-    public static function findIdentityByAccessToken($token, $type = null): User|null
+    public static function findIdentityByAccessToken($token, $type = null): ?User
     {
         return self::findOne(['access_token' => $token]);
     }

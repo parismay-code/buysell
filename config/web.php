@@ -10,7 +10,7 @@ $config = [
     'language' => 'ru_RU',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'components' => [
         'request' => [
@@ -23,6 +23,7 @@ $config = [
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
+            'loginUrl' => ['login/index'],
         ],
         'errorHandler' => [
             'errorAction' => 'error/index',

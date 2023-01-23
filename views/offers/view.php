@@ -6,7 +6,6 @@ use app\models\CommentForm;
 use app\models\ChatForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use app\helpers\DateHelpers;
 use yii\widgets\ActiveForm;
 
 /**
@@ -17,7 +16,6 @@ use yii\widgets\ActiveForm;
  */
 
 $user = Yii::$app->user->identity;
-
 ?>
 
 <section class="ticket">
@@ -39,7 +37,17 @@ $user = Yii::$app->user->identity;
                 <div class="ticket__data">
                     <p>
                         <b>Дата добавления:</b>
-                        <span><?= DateHelpers::formatDate($offer->creation_date); ?></span>
+
+                        <span>
+                            <?php
+                            $dt = new DateTime($offer->creation_date);
+
+                            $formatter = new IntlDateFormatter(Yii::$app->language, IntlDateFormatter::LONG, IntlDateFormatter::LONG);
+                            $formatter->setPattern('d MMMM Y');
+
+                            echo $formatter->format($dt);
+                            ?>
+                        </span>
                     </p>
                     <p>
                         <b>Автор:</b>
@@ -92,7 +100,7 @@ $user = Yii::$app->user->identity;
                     ]); ?>
                     <div class="comment-form__header">
                         <a href="#" class="comment-form__avatar avatar">
-                            <img src="<?= $user->avatar_url ?>" alt="Аватар пользователя">
+                            <?= Html::img(Yii::$app->user->identity->avatar_url ?? Yii::getAlias('@web/img/placeholder.png'), ['alt' => 'Аватар пользователя']) ?>
                         </a>
                         <p class="comment-form__author">Вам слово</p>
                     </div>
@@ -114,7 +122,7 @@ $user = Yii::$app->user->identity;
                                 <div class="comment-card__header">
                                     <a href="#"
                                        class="comment-card__avatar avatar">
-                                        <img src="<?= $comment->author->avatar_url ?>" alt="Аватар пользователя">
+                                        <?= Html::img($comment->author->avatar_url ?? Yii::getAlias('@web/img/placeholder.png'), ['alt' => 'Аватар пользователя']) ?>
                                     </a>
                                     <p class="comment-card__author"><?= Html::encode($comment->author->username) ?></p>
                                 </div>

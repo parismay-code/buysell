@@ -25,7 +25,7 @@ use yii\helpers\Url;
             <div class="comment-card">
                 <div class="comment-card__header">
                     <a href="#" class="comment-card__avatar avatar">
-                        <img src="<?= $model->author->avatar_url ?>" alt="Аватар пользователя">
+                        <?= Html::img(Yii::$app->user->identity->avatar_url ?? Yii::getAlias('@web/img/placeholder.png'), ['alt' => 'Аватар пользователя']) ?>
                     </a>
                     <p class="comment-card__author"><?= Html::encode($model->author->username) ?></p>
                 </div>
