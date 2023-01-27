@@ -129,5 +129,7 @@ class OfferForm extends Model
 
             return true;
         }
+
+        return false;
     }
 }

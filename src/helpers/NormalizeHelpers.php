@@ -1,6 +1,6 @@
 <?php
 
-namespace app\src\helpers;
+namespace BuySell\helpers;
 
 class NormalizeHelpers
 {
@@ -14,7 +14,7 @@ class NormalizeHelpers
      *
      * @return string
      */
-    static function getNounPluralForm(int $number, string $one, string $two, string $many): string
+    public static function getNounPluralForm(int $number, string $one, string $two, string $many): string
     {
         $mod10 = $number % 10;
 

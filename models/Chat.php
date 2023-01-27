@@ -20,7 +20,7 @@ class Chat extends Model
         $this->reference = $database->getReference('chat/message');
     }
 
-    function createMessage(int $authorId, int $offerId, string $text): Reference
+    public function createMessage(int $authorId, int $offerId, string $text): Reference
     {
         return $this->reference->push([
             'author_id' => $authorId,
@@ -32,7 +32,7 @@ class Chat extends Model
         ]);
     }
 
-    function getMessages(Offer $offer): array
+    public function getMessages(Offer $offer): array
     {
         return $this->reference
                 ->orderByChild('offer_id__author_id')
