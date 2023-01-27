@@ -3,7 +3,7 @@
 use yii\web\View;
 use app\models\Offer;
 use yii\data\ActiveDataProvider;
-use app\src\helpers\NormalizeHelpers;
+use BuySell\helpers\NormalizeHelpers;
 use yii\widgets\ListView;
 
 /**

@@ -50,6 +50,11 @@
       "enabled": false
     }
   },
+  "autoload": {
+    "psr-4": {
+      "BuySell\\": "src/"
+    }
+  },
   "scripts": {
     "post-install-cmd": [
       "yii\\composer\\Installer::postInstall"

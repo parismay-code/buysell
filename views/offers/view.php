@@ -38,16 +38,7 @@ $user = Yii::$app->user->identity;
                     <p>
                         <b>Дата добавления:</b>
 
-                        <span>
-                            <?php
-                            $dt = new DateTime($offer->creation_date);
-
-                            $formatter = new IntlDateFormatter(Yii::$app->language, IntlDateFormatter::LONG, IntlDateFormatter::LONG);
-                            $formatter->setPattern('d MMMM Y');
-
-                            echo $formatter->format($dt);
-                            ?>
-                        </span>
+                        <span><?= Yii::$app->formatter->asDate($offer->creation_date, 'd MMMM Y'); ?></span>
                     </p>
                     <p>
                         <b>Автор:</b>

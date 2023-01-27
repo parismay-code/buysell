@@ -25,8 +25,6 @@ use yii\web\IdentityInterface;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    public string $loginUrl = 'login/index';
-
     /**
      * {@inheritdoc}
      */
